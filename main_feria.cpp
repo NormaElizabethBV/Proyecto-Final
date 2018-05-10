@@ -3,7 +3,7 @@
 //************************************************************//
 //************** Alumno (s): *********************************//
 //*************		Baca Velázquez Norma Elizabeth	
-******//            Mayo Palma Karla
+//                  Mayo Palma Karla
 //*************	++++++	Visual Studio 2010-2015 +++++
 //************************************************************//
 //************************************************************//
@@ -34,17 +34,13 @@ GLfloat m_spec1[] = { 0.0, 0.0, 0.0, 1.0 };				// Specular Light Values
 GLfloat m_amb1[] = { 0.0, 0.0, 0.0, 1.0 };				// Ambiental Light Values
 GLfloat m_s1[] = {18};
 
-CTexture text1;
-CTexture text2;
-
-CTexture text4;	//Pavimento
-CTexture text5;	//Pasto01
+CTexture text1;//Cielo
+CTexture text2;//Cemento
 
 
 CFiguras fig1;
-CFiguras fig2;
-CFiguras fig3;
-CFiguras fig4;	//Pasto01
+CFiguras piso;
+
 
 
 //Figuras de 3D Studio
@@ -84,18 +80,20 @@ void InitGL ( GLvoid )     // Inicializamos parametros
 	/* setup blending */
 	glEnable(GL_BLEND);			// Turn Blending On
     
-    text1.LoadBMP("01.bmp");
+    text1.LoadBMP("Texturas/01.bmp");
 	text1.BuildGLTexture();
 	text1.ReleaseImage();
 
-	
+	text2.LoadTGA("Texturas/cemento1.tga");
+	text2.BuildGLTexture();
+	text2.ReleaseImage();
 
 	
 
 	//Carga de Figuras
 	
-	//kiosco._3dsLoad("kiosco.3ds");	
-	//kiosco.Scale(0.02);
+	kiosco._3dsLoad("kiosco.3ds");	
+	kiosco.Scale(0.02);
 	
 	//kit.VertexNormals();
 
@@ -136,22 +134,29 @@ void display ( void )   // Creamos la funcion donde se dibuja
 		glPushMatrix();		
 			glPushMatrix(); //Creamos cielo
 				glDisable(GL_LIGHTING);
-				glTranslatef(0,60,0);
-				fig1.skybox(130.0, 130.0, 130.0,text1.GLindex);
+				glTranslatef(0,50,0);
+				fig1.skybox(200.0, 220.0, 200.0,text1.GLindex);
 				glEnable(GL_LIGHTING);
 			glPopMatrix();
 
-			
-			glPushMatrix();		
-			glPushMatrix(); //Intento Pasto
+				
+	//glBindTexture(GL_TEXTURE_2D....)
+			//glTexCoord2f( coordenadas)
+			glPushMatrix(); //Piso
 				glDisable(GL_LIGHTING);
-				glTranslatef(0,-60,0);
-			    
+				glTranslatef(0,-40,0);
+			    piso.prisma(.01,200.0,200.0,text2.GLindex);
 				glEnable(GL_LIGHTING);
 			glPopMatrix();
-
+		//glPopMatrix();
 			     
-				//Para que el coche conserve sus colores
+				
+		
+		
+		
+		
+		
+		//Para que el coche conserve sus colores
 				glDisable(GL_COLOR_MATERIAL);
 				glTranslatef(0,2,0);
 				glScalef(0.3, 0.3, 0.3);
@@ -161,8 +166,6 @@ void display ( void )   // Creamos la funcion donde se dibuja
 				//tent  
 			
 
-			//Para que el comando glColor funcione con iluminacion
-			//glEnable(GL_COLOR_MATERIAL);
 
 				
 			
@@ -174,8 +177,8 @@ void display ( void )   // Creamos la funcion donde se dibuja
 
 			glColor3f(1.0,1.0,1.0);
 
-		glPopMatrix();
 	glPopMatrix();
+glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
@@ -189,13 +192,6 @@ void display ( void )   // Creamos la funcion donde se dibuja
 
 void animacion()
 {
-	fig3.text_izq-= 0.001;
-	fig3.text_der-= 0.001;
-	if(fig3.text_izq<-1)
-		fig3.text_izq=0;
-	if(fig3.text_der<0)
-		fig3.text_der=1;
-
 
 	if(g_fanimacion)
 	{     
@@ -310,7 +306,7 @@ int main ( int argc, char** argv )   // Main Function
 {
   glutInit            (&argc, argv); // Inicializamos OpenGL
   glutInitDisplayMode (GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH); // Display Mode (Clores RGB y alpha | Buffer Doble )
-  glutInitWindowSize  (700, 700);	// Tamaño de la Ventana
+  glutInitWindowSize  (800, 800);	// Tamaño de la Ventana
   glutInitWindowPosition (0, 0);	//Posicion de la Ventana
   glutCreateWindow    ("Proyecto Final"); // Nombre de la Ventana
   //glutFullScreen     ( );         // Full Screen
